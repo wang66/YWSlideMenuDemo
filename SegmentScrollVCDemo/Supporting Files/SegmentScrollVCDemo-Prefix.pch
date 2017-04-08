@@ -1,0 +1,28 @@
+//
+//  SegmentScrollVCDemo-Prefix.pch
+//  SegmentScrollVCDemo
+//
+//  Created by 王亚文 on 2017/4/9.
+//  Copyright © 2017年 wyw. All rights reserved.
+//
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+// common
+
+#import "PublicDefine.h"
+
+
+// custom function
+
+#import "YWAutoLayout.h"
+
+
+#endif /* SegmentScrollVCDemo_Prefix_pch */
