@@ -39,8 +39,7 @@
 {
     YWSlideMenu *slideMenu = [[YWSlideMenu alloc] initWithFrame:self.contentView.bounds];
     slideMenu.itemsTitle = @[@"头条", @"娱乐", @"体育", @"财经", @"科技", @"时尚", @"直播", @"热点", @"图片", @"新闻"];
-    slideMenu.itemBarSize = CGSizeMake(60, Height_SlideMenu);
-//    slideMenu.barBgColor = Color_Random;
+    slideMenu.itemBarSize = CGSizeMake(60, Height_SlideMenu); // 
     slideMenu.ywSlideMenuDelegate = self;
     [self.contentView addSubview:slideMenu];
 }
