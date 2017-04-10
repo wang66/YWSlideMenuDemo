@@ -10,9 +10,12 @@
 #import "YWAutoLayout.h"
 #import "YWSlideMenu.h"
 
+
 @interface BasicCell ()
 
 @property (nonatomic, strong)UILabel            *titleLab;
+
+@property (nonatomic, strong)SlideModel         *slideModel;
 
 @end
 
@@ -36,6 +39,7 @@
     self.titleLab = [UILabel create];
     self.titleLab.font = FONT(14);
     self.titleLab.textColor = [UIColor blackColor];
+    self.titleLab.backgroundColor = [UIColor clearColor];
     self.titleLab.textAlignment = NSTextAlignmentCenter;
     [self addSubview:self.titleLab];
     LAY(self.titleLab.centerX, self.centerX, 1, 0);
@@ -50,13 +54,20 @@
 - (void)refreshContent:(SlideModel *)itemModel
 {
     [self clearCellData];
+    _slideModel = itemModel;
     self.titleLab.text = itemModel.itemTitle;
-    if(itemModel.isSelected){
-        self.titleLab.textColor = [UIColor orangeColor];
-        self.titleLab.font = FONT(16);
+}
+
+- (void)cellSettingConfig:(CellSettingModel *)cellSettingModel
+{
+    if(_slideModel.isSelected){
+        self.titleLab.textColor = cellSettingModel.textHighlightColor;
+        self.titleLab.font = cellSettingModel.highlightFont;
+        self.backgroundColor = cellSettingModel.highlightBgColor;
     }else{
-        self.titleLab.textColor = [UIColor blackColor];
-        self.titleLab.font = FONT(14);
+        self.titleLab.textColor = cellSettingModel.textColor;
+        self.titleLab.font = cellSettingModel.font;
+        self.backgroundColor = cellSettingModel.bgColor;
     }
 }
 

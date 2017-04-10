@@ -9,7 +9,7 @@
 #import "ScrollSegmentViewController.h"
 #import "YWSlideMenu.h"
 
-#define PDColor_Random              [UIColor colorWithRed:arc4random()%256/255.0 green:arc4random()%256/255.0 blue:arc4random()%256/255.0 alpha:1]
+#define Height_SlideMenu 30.f
 
 @interface ScrollSegmentViewController ()<YWSlideMenuDelegate, UITableViewDataSource, UITableViewDelegate>
 
@@ -39,33 +39,41 @@
 {
     YWSlideMenu *slideMenu = [[YWSlideMenu alloc] initWithFrame:self.contentView.bounds];
     slideMenu.itemsTitle = @[@"头条", @"娱乐", @"体育", @"财经", @"科技", @"时尚", @"直播", @"热点", @"图片", @"新闻"];
+    slideMenu.itemBarSize = CGSizeMake(60, Height_SlideMenu);
+//    slideMenu.barBgColor = Color_Random;
     slideMenu.ywSlideMenuDelegate = self;
     [self.contentView addSubview:slideMenu];
 }
 
-- (UIView *)ywSlideMenu:(YWSlideMenu *)slideMenu indexPath:(NSIndexPath *)indexPath
+- (UIView *)ywSlideMenu:(YWSlideMenu *)slideMenu index:(NSInteger)index
 {
-    if(indexPath.row==0)
+    if(index==0)
     {
-        _firstTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, Width_MainScreen, Height_MainScreen-30.f) style:UITableViewStylePlain];
-        _firstTableView.dataSource = self;
-        _firstTableView.delegate = self;
-        _firstTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _firstTableView.tableFooterView = [[UIView alloc] init];
+        if(!_firstTableView){
+            _firstTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, Width_MainScreen, Height_MainScreen-Height_SlideMenu-64.f) style:UITableViewStylePlain];
+            _firstTableView.dataSource = self;
+            _firstTableView.delegate = self;
+            _firstTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+            _firstTableView.tableFooterView = [[UIView alloc] init];
+        }
         return _firstTableView;
     }
-    else if(indexPath.row==1)
+    else if(index==1)
     {
-        _secondTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, Width_MainScreen, Height_MainScreen-30.f) style:UITableViewStylePlain];
-        _secondTableView.dataSource = self;
-        _secondTableView.delegate = self;
-        _secondTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _secondTableView.tableFooterView = [[UIView alloc] init];
+        if(!_secondTableView){
+            _secondTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, Width_MainScreen, Height_MainScreen-Height_SlideMenu-64.f) style:UITableViewStylePlain];
+            _secondTableView.dataSource = self;
+            _secondTableView.delegate = self;
+            _secondTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+            _secondTableView.tableFooterView = [[UIView alloc] init];
+        }
+        
         return _secondTableView;
     }
     else{
-        UIView *emptyView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, Width_MainScreen, Height_MainScreen-30.f)];
-        emptyView.backgroundColor = PDColor_Random;
+        
+        UIView *emptyView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, Width_MainScreen, Height_MainScreen-Height_SlideMenu-64.f)];
+        emptyView.backgroundColor = Color_Random;
         return emptyView;
     }
     

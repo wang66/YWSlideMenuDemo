@@ -11,11 +11,38 @@
 #define PDColor_Random              [UIColor colorWithRed:arc4random()%256/255.0 green:arc4random()%256/255.0 blue:arc4random()%256/255.0 alpha:1]
 
 
-
-
 @implementation SlideModel
 
 //- (void)
+
+@end
+
+
+@interface CellSettingModel ()
+
+
+@end
+
+
+@implementation CellSettingModel
+
+- (instancetype)init
+{
+    self = [super init];
+    if(self){
+        _textColor = RGB(60, 60, 90);
+        _textHighlightColor = Color_White;
+        
+        _font = FONT(13);
+        _highlightFont = FONT(15);
+        
+        _bgColor = RGB(177, 221, 174);
+        _highlightBgColor = RGB(28, 215, 187);
+    }
+    return self;
+}
+
+
 
 @end
 
@@ -27,7 +54,7 @@
 @property (nonatomic, strong)UITableView            *slideBarTabelView;
 @property (nonatomic, strong)UITableView            *slideContentTableView;
 @property (nonatomic, strong)NSMutableArray         *itemModelsArr;
-
+@property (nonatomic, strong)CellSettingModel       *cellSettingModel;
 @end
 
 
@@ -38,12 +65,11 @@
     self = [super initWithFrame:frame];
     if(self)
     {
-        
         _itemBarSize = CGSizeMake(65.f, 30.f);
+        _cellSettingModel = [[CellSettingModel alloc] init];
         
         [self loadSlideMenuBar];
         [self loadSlodeMenuContentView];
-        
     }
     return self;
 }
@@ -57,7 +83,7 @@
     self.slideBarTabelView.transform = CGAffineTransformMakeRotation(-M_PI_2); //旋转形变一定要给frame和center赋值后面
     
     self.slideContentTableView.frame = CGRectMake(0, CGRectGetHeight(self.slideBarTabelView.frame), CGRectGetHeight(self.frame)-CGRectGetHeight(self.slideBarTabelView.frame), CGRectGetWidth(self.frame));
-    self.slideContentTableView.center = CGPointMake(CGRectGetWidth(self.frame)/2.f, (CGRectGetHeight(self.frame)+_itemBarSize.height+10.f)/2.f);
+    self.slideContentTableView.center = CGPointMake(CGRectGetWidth(self.frame)/2.f, (CGRectGetHeight(self.frame)+_itemBarSize.height)/2.f);
     self.slideContentTableView.transform = CGAffineTransformMakeRotation(-M_PI_2); //旋转形变一定要给frame和center赋值后面
 }
 
@@ -103,6 +129,7 @@
         
         SlideModel *slideModel = self.itemModelsArr[indexPath.row];
         [cell refreshContent:slideModel];
+        [cell cellSettingConfig:_cellSettingModel];
         return cell;
     }
     else
@@ -115,8 +142,8 @@
         }
         cell.backgroundColor = PDColor_Random;
 
-        if([self.ywSlideMenuDelegate respondsToSelector:@selector(ywSlideMenu:indexPath:)]){
-            UIView *cellView = [self.ywSlideMenuDelegate ywSlideMenu:self indexPath:indexPath];
+        if([self.ywSlideMenuDelegate respondsToSelector:@selector(ywSlideMenu:index:)]){
+            UIView *cellView = [self.ywSlideMenuDelegate ywSlideMenu:self index:indexPath.row];
             for(UIView *subView in cell.subviews)
             {
                 [subView removeFromSuperview];
@@ -147,7 +174,7 @@
     if(tableView==self.slideBarTabelView){
         BasicCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         NSInteger count = cell.frame.origin.y/_itemBarSize.width;
-        self.slideContentTableView.contentOffset = CGPointMake(0, CGRectGetWidth(self.frame)*count);
+        self.slideContentTableView.contentOffset = CGPointMake(0, CGRectGetWidth(tableView.frame)*count);
         [self.slideBarTabelView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
         [self selectedTableView:tableView indexPath:indexPath];
     }
@@ -212,6 +239,67 @@
 {
     _itemBarSize = itemBarSize;
     [self setNeedsLayout];
+}
+
+- (void)setBarTextColor:(UIColor *)barTextColor
+{
+    if(!barTextColor){
+        return;
+    }
+    _barTextColor = barTextColor;
+    _cellSettingModel.textColor = barTextColor;
+    [self.slideBarTabelView reloadData];
+}
+
+- (void)setBarTextHighlightColor:(UIColor *)barTextHighlightColor
+{
+    if(!barTextHighlightColor){
+        return;
+    }
+    _barTextHighlightColor = barTextHighlightColor;
+    _cellSettingModel.textHighlightColor = barTextHighlightColor;
+    [self.slideBarTabelView reloadData];
+    
+}
+
+- (void)setBarFont:(UIFont *)barFont
+{
+    if(!barFont){
+        return;
+    }
+    _barFont = barFont;
+    _cellSettingModel.font = barFont;
+    [self.slideBarTabelView reloadData];
+}
+
+- (void)setBarHighlightFont:(UIFont *)barHighlightFont
+{
+    if(!barHighlightFont){
+        return;
+    }
+    _barHighlightFont = barHighlightFont;
+    _cellSettingModel.highlightFont = barHighlightFont;
+    [self.slideBarTabelView reloadData];
+}
+
+- (void)setBarBgColor:(UIColor *)barBgColor
+{
+    if(!barBgColor){
+        return;
+    }
+    _barBgColor = barBgColor;
+    _cellSettingModel.bgColor = barBgColor;
+    [self.slideBarTabelView reloadData];
+}
+
+- (void)setBarHighlightBgColor:(UIColor *)barHighlightBgColor
+{
+    if(!barHighlightBgColor){
+        return;
+    }
+    _barHighlightBgColor = barHighlightBgColor;
+    _cellSettingModel.highlightBgColor = barHighlightBgColor;
+    [self.slideBarTabelView reloadData];
 }
 
 @end

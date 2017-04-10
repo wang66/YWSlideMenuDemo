@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 @class SlideModel;
+@class CellSettingModel;
 @interface BasicCell : UITableViewCell
 + (CGFloat)cellHeight;
 - (void)refreshContent:(SlideModel *)itemModel;
+- (void)cellSettingConfig:(CellSettingModel *)cellSettingModel;
 @end

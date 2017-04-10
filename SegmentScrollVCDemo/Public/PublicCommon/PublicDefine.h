@@ -23,6 +23,8 @@
 
 #define Color_Random              [UIColor colorWithRed:arc4random()%256/255.0 green:arc4random()%256/255.0 blue:arc4random()%256/255.0 alpha:1]
 
+#define Color_White      [UIColor whiteColor]
+
 
 
 
