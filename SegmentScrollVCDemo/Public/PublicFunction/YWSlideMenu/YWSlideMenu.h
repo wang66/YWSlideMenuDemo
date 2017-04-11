@@ -52,3 +52,10 @@
 @property (nonatomic, strong)UIColor            *highlightBgColor;
 
 @end
+
+
+@interface BasicCell : UITableViewCell
++ (CGFloat)cellHeight;
+- (void)refreshContent:(SlideModel *)itemModel;
+- (void)cellSettingConfig:(CellSettingModel *)cellSettingModel;
+@end

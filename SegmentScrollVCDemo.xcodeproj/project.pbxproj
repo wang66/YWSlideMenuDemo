@@ -10,7 +10,6 @@
 		081B7DF11E98BBC200AFE506 /* AutoLayoutObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 081B7DEC1E98BBC200AFE506 /* AutoLayoutObject.m */; };
 		081B7DF21E98BBC200AFE506 /* UIView+AutoLayoutAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 081B7DEE1E98BBC200AFE506 /* UIView+AutoLayoutAttribute.m */; };
 		081B7DF51E98BBE000AFE506 /* YWSlideMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 081B7DF41E98BBE000AFE506 /* YWSlideMenu.m */; };
-		081B7DF81E98CFCD00AFE506 /* BasicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 081B7DF71E98CFCD00AFE506 /* BasicCell.m */; };
 		08A5C2A31E98B1BE000F22E7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A5C2A21E98B1BE000F22E7 /* AppDelegate.m */; };
 		08A5C2B91E98B1BF000F22E7 /* SegmentScrollVCDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A5C2B81E98B1BF000F22E7 /* SegmentScrollVCDemoTests.m */; };
 		08A5C2C41E98B1BF000F22E7 /* SegmentScrollVCDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A5C2C31E98B1BF000F22E7 /* SegmentScrollVCDemoUITests.m */; };
@@ -48,8 +47,6 @@
 		081B7DEF1E98BBC200AFE506 /* YWAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YWAutoLayout.h; sourceTree = "<group>"; };
 		081B7DF31E98BBE000AFE506 /* YWSlideMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YWSlideMenu.h; sourceTree = "<group>"; };
 		081B7DF41E98BBE000AFE506 /* YWSlideMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YWSlideMenu.m; sourceTree = "<group>"; };
-		081B7DF61E98CFCD00AFE506 /* BasicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicCell.h; sourceTree = "<group>"; };
-		081B7DF71E98CFCD00AFE506 /* BasicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicCell.m; sourceTree = "<group>"; };
 		089FA4991E99573D00EA6C44 /* SegmentScrollVCDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SegmentScrollVCDemo-Prefix.pch"; sourceTree = "<group>"; };
 		08A5C29B1E98B1BE000F22E7 /* SegmentScrollVCDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SegmentScrollVCDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08A5C2A11E98B1BE000F22E7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -254,8 +251,6 @@
 		08A5C2F01E98B36B000F22E7 /* VHome */ = {
 			isa = PBXGroup;
 			children = (
-				081B7DF61E98CFCD00AFE506 /* BasicCell.h */,
-				081B7DF71E98CFCD00AFE506 /* BasicCell.m */,
 			);
 			path = VHome;
 			sourceTree = "<group>";
@@ -394,7 +389,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				081B7DF81E98CFCD00AFE506 /* BasicCell.m in Sources */,
 				08A5C2DF1E98B220000F22E7 /* main.m in Sources */,
 				08A5C2A31E98B1BE000F22E7 /* AppDelegate.m in Sources */,
 				08A5C2E91E98B268000F22E7 /* CommonViewController.m in Sources */,
