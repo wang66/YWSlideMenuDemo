@@ -1,8 +1,7 @@
 # YWSlideMenuDemo
 
 最终效果：
-
-![YWmenu.gif](http://upload-images.jianshu.io/upload_images/988593-ab9a100f91e411d0.gif?imageMogr2/auto-orient/strip)
+![YWmenu.gif](http://upload-images.jianshu.io/upload_images/988593-f6d50b30902869c6.gif?imageMogr2/auto-orient/strip)
 
 
 使用姿势：
