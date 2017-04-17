@@ -25,7 +25,7 @@
 
 #define Color_White      [UIColor whiteColor]
 
-
+#define Color_Clear      [UIColor clearColor]
 
 
 #endif /* PublicDefine_h */

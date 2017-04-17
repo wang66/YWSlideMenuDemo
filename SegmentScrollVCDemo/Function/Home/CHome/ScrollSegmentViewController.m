@@ -15,6 +15,9 @@
 
 @property (nonatomic, strong)UITableView        *firstTableView;
 @property (nonatomic, strong)UITableView        *secondTableView;
+@property (nonatomic ,strong)NSMutableArray     *barTitleItems;
+@property (nonatomic ,strong)NSMutableArray     *barImageItems;
+@property (nonatomic, strong)YWSlideMenu        *slideMenu;
 
 
 @end
@@ -23,10 +26,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [self loadTitleView];
     [self loadContentView];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     
+    _barTitleItems = [NSMutableArray arrayWithArray:@[@"头条", @"娱乐", @"体育", @"财经", @"科技", @"时尚", @"直播", @"热点", @"图片", @"新闻"]];
+    _barImageItems = [NSMutableArray arrayWithArray:@[IMAGE(@"01.png"),IMAGE(@"02.png"),IMAGE(@"03.png"),IMAGE(@"04.png"),IMAGE(@"05.png"),IMAGE(@"06.png"),IMAGE(@"07.png"),IMAGE(@"08.png"),IMAGE(@"09.png"),IMAGE(@"10.png")]];
+    _slideMenu.itemBarSize = CGSizeMake(70, Height_SlideMenu);
+    
+    _slideMenu.itemsTitle = _barTitleItems;
+    _slideMenu.itemsImage = _barImageItems;
 }
 
 - (void)loadTitleView
@@ -37,14 +51,26 @@
 
 - (void)loadContentView
 {
-    YWSlideMenu *slideMenu = [[YWSlideMenu alloc] initWithFrame:self.contentView.bounds];
-    slideMenu.itemsTitle = @[@"头条", @"娱乐", @"体育", @"财经", @"科技", @"时尚", @"直播", @"热点", @"图片", @"新闻"];
-    slideMenu.itemBarSize = CGSizeMake(60, Height_SlideMenu); // 
-    slideMenu.ywSlideMenuDelegate = self;
-    [self.contentView addSubview:slideMenu];
+    _slideMenu = [[YWSlideMenu alloc] initWithFrame:self.contentView.bounds];
+//    _slideMenu.itemsTitle = _barTitleItems;
+//    _slideMenu.itemsImage =
+    _slideMenu.itemBarSize = CGSizeMake(60, Height_SlideMenu); //
+    _slideMenu.ywSlideMenuDelegate = self;
+    [self.contentView addSubview:_slideMenu];
 }
 
-- (UIView *)ywSlideMenu:(YWSlideMenu *)slideMenu index:(NSInteger)index
+- (UIView *)ywSlideMenu:(YWSlideMenu *)slideMenu cellForBarViewAtIndex:(NSInteger)index
+{
+    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 10)];
+    [btn setTitle:_barTitleItems[index] forState:UIControlStateNormal];
+    [btn setImage:_barImageItems[index] forState:UIControlStateNormal];
+    btn.titleLabel.font = FONT(14);
+    btn.userInteractionEnabled = NO;
+    
+    return btn;
+}
+
+- (UIView *)ywSlideMenu:(YWSlideMenu *)slideMenu cellForContentViewAtIndex:(NSInteger)index
 {
     if(index==0)
     {
@@ -70,7 +96,7 @@
         return _secondTableView;
     }
     else{
-        
+    
         UIView *emptyView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, Width_MainScreen, Height_MainScreen-Height_SlideMenu-64.f)];
         emptyView.backgroundColor = Color_Random;
         return emptyView;
@@ -80,6 +106,14 @@
 
 }
 
+- (void)ywSlideMenu:(YWSlideMenu *)slideMenu didSelectedIndex:(NSInteger)selectedIndex
+{
+    NSLog(@"❤---选中了第%d项", (int)selectedIndex);
+}
+
+
+
+#pragma mark - tableView delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(tableView==_firstTableView){

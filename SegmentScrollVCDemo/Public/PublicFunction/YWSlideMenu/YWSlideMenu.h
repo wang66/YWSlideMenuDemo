@@ -10,15 +10,18 @@
 @class YWSlideMenu;
 @protocol YWSlideMenuDelegate <NSObject>
 
-- (void)ywSlideMenu:(YWSlideMenu *)slideMenu selectedIndex:(NSInteger)selectedIndex;
+- (void)ywSlideMenu:(YWSlideMenu *)slideMenu didSelectedIndex:(NSInteger)selectedIndex;
 
-- (UIView *)ywSlideMenu:(YWSlideMenu *)slideMenu index:(NSInteger)index;
+- (UIView *)ywSlideMenu:(YWSlideMenu *)slideMenu cellForContentViewAtIndex:(NSInteger)index;
+
+- (UIView *)ywSlideMenu:(YWSlideMenu *)slideMenu cellForBarViewAtIndex:(NSInteger)index;
 
 @end
 
 @interface YWSlideMenu : UIView
 
 @property (nonatomic, strong)NSArray        *itemsTitle;
+@property (nonatomic, strong)NSArray        *itemsImage;
 @property (nonatomic, assign)CGSize          itemBarSize;
 @property (nonatomic, strong)UIColor        *barTextColor;
 @property (nonatomic, strong)UIColor        *barTextHighlightColor;
@@ -35,6 +38,7 @@
 @interface SlideModel : NSObject
 
 @property (nonatomic, copy)NSString         *itemTitle;
+@property ( nonatomic, strong)UIImage       *itemImage;
 @property (nonatomic, assign)BOOL            isSelected;
 
 @end

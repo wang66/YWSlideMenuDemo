@@ -47,11 +47,8 @@
 
 
 @interface BasicCell ()
-
 @property (nonatomic, strong)UILabel            *titleLab;
-
 @property (nonatomic, strong)SlideModel         *slideModel;
-
 @end
 
 @implementation BasicCell
@@ -63,6 +60,7 @@
     if(self)
     {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.backgroundColor = Color_Clear;
         [self loadContentView];
     }
     
@@ -118,11 +116,8 @@
 
 
 
-
-
-
 @interface YWSlideMenu ()<UITableViewDataSource, UITableViewDelegate>
-
+@property (nonatomic, strong)UIView                 *moveSlide;
 @property (nonatomic, strong)UITableView            *slideBarTabelView;
 @property (nonatomic, strong)UITableView            *slideContentTableView;
 @property (nonatomic, strong)NSMutableArray         *itemModelsArr;
@@ -140,8 +135,9 @@
         _itemBarSize = CGSizeMake(65.f, 30.f);
         _cellSettingModel = [[CellSettingModel alloc] init];
         
+//        [self loadMoveSlide];
         [self loadSlideMenuBar];
-        [self loadSlodeMenuContentView];
+        [self loadSlideMenuContentView];
     }
     return self;
 }
@@ -149,6 +145,8 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    
+    self.moveSlide.frame = CGRectMake(0, 0, _itemBarSize.width, _itemBarSize.height);
     
     self.slideBarTabelView.frame = CGRectMake(0, 0, _itemBarSize.height, CGRectGetWidth(self.frame));
     self.slideBarTabelView.center = CGPointMake(CGRectGetWidth(self.frame)/2.f, _itemBarSize.height/2.f);
@@ -159,6 +157,13 @@
     self.slideContentTableView.transform = CGAffineTransformMakeRotation(-M_PI_2); //旋转形变一定要给frame和center赋值后面
 }
 
+- (void)loadMoveSlide
+{
+    self.moveSlide = [[UIView alloc] initWithFrame:CGRectZero];
+    self.moveSlide.backgroundColor = [UIColor orangeColor];
+    [self addSubview:self.moveSlide];
+}
+
 - (void)loadSlideMenuBar
 {
     self.slideBarTabelView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -166,10 +171,11 @@
     self.slideBarTabelView.delegate = self;
     self.slideBarTabelView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.slideBarTabelView.showsVerticalScrollIndicator = NO;
+    self.slideBarTabelView.backgroundColor = Color_Clear;
     [self addSubview:self.slideBarTabelView];
 }
 
-- (void)loadSlodeMenuContentView
+- (void)loadSlideMenuContentView
 {
     self.slideContentTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.slideContentTableView.dataSource = self;
@@ -193,16 +199,27 @@
     if(tableView==self.slideBarTabelView)
     {
         static NSString *barCellId = @"barCellId";
-        BasicCell *cell = [tableView dequeueReusableCellWithIdentifier:barCellId];
-        if(cell==nil){
-            cell = [[BasicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:barCellId];
-            cell.transform = CGAffineTransformMakeRotation(M_PI_2);
+        BasicCell *barCell = [tableView dequeueReusableCellWithIdentifier:barCellId];
+        if(barCell==nil){
+            barCell = [[BasicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:barCellId];
+            barCell.transform = CGAffineTransformMakeRotation(M_PI_2);
+        }
+        SlideModel *slideModel = self.itemModelsArr[indexPath.row];
+        [barCell refreshContent:slideModel];
+        [barCell cellSettingConfig:_cellSettingModel];
+        
+        if([self.ywSlideMenuDelegate respondsToSelector:@selector(ywSlideMenu:cellForBarViewAtIndex:)]){
+            UIView *barCellView = [self.ywSlideMenuDelegate ywSlideMenu:self cellForBarViewAtIndex:indexPath.row];
+            barCellView.frame = CGRectMake(0, 0, _itemBarSize.width, _itemBarSize.height);
+            for(UIView *subView in barCell.subviews){
+                [subView removeFromSuperview];
+            }
+            [barCell refreshContent:slideModel];
+            [barCell cellSettingConfig:_cellSettingModel];
+            [barCell addSubview:barCellView];
         }
         
-        SlideModel *slideModel = self.itemModelsArr[indexPath.row];
-        [cell refreshContent:slideModel];
-        [cell cellSettingConfig:_cellSettingModel];
-        return cell;
+        return barCell;
     }
     else
     {
@@ -210,18 +227,17 @@
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:contentCellId];
         if(cell==nil){
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:contentCellId];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.transform = CGAffineTransformMakeRotation(M_PI_2);
         }
         cell.backgroundColor = PDColor_Random;
 
-        if([self.ywSlideMenuDelegate respondsToSelector:@selector(ywSlideMenu:index:)]){
-            UIView *cellView = [self.ywSlideMenuDelegate ywSlideMenu:self index:indexPath.row];
-            for(UIView *subView in cell.subviews)
-            {
+        if([self.ywSlideMenuDelegate respondsToSelector:@selector(ywSlideMenu:cellForContentViewAtIndex:)]){
+            UIView *cellView = [self.ywSlideMenuDelegate ywSlideMenu:self cellForContentViewAtIndex:indexPath.row];
+            for(UIView *subView in cell.subviews){
                 [subView removeFromSuperview];
             }
             [cell addSubview:cellView];
-            
         }
         return cell;
     }
@@ -234,7 +250,10 @@
     if(tableView==self.slideBarTabelView){
         return _itemBarSize.width;
     }else if(tableView==self.slideContentTableView){
-        return CGRectGetWidth(tableView.frame);
+//        NSLog(@"%d----%f-----", (int)indexPath.row,CGRectGetHeight(tableView.frame)); // 这里有个bug，最后一行的高度竟然是375，而不是正确的573
+//        return CGRectGetHeight(tableView.frame);
+        return Width_MainScreen;
+        
     }
     return CGRectGetWidth(self.frame);
 }
@@ -246,20 +265,45 @@
     if(tableView==self.slideBarTabelView){
         BasicCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         NSInteger count = cell.frame.origin.y/_itemBarSize.width;
+        NSLog(@"❤❤❤❤❤❤❤❤%f", CGRectGetWidth(tableView.frame)*count);
         self.slideContentTableView.contentOffset = CGPointMake(0, CGRectGetWidth(tableView.frame)*count);
         [self.slideBarTabelView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
         [self selectedTableView:tableView indexPath:indexPath];
+        
+        if([self.ywSlideMenuDelegate respondsToSelector:@selector(ywSlideMenu:didSelectedIndex:)]){
+            [self.ywSlideMenuDelegate ywSlideMenu:self didSelectedIndex:indexPath.row];
+        }
     }
 }
 
 #pragma mark - scrollView delegate
 
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    CGFloat offset_x = _itemBarSize.width/Width_MainScreen*scrollView.contentOffset.y;
+//    self.moveSlide.frame = CGRectMake(offset_x, 0, _itemBarSize.width, _itemBarSize.height);
+//}
+//
+//- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+//{
+//    int w = (int)Width_MainScreen;
+//    
+//    CGFloat offset_x = (int)scrollView.contentOffset.y%w;
+//    self.moveSlide.frame = CGRectMake(offset_x, 0, _itemBarSize.width, _itemBarSize.height);
+//}
+
 // 当滑动减速时调用一次
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     NSIndexPath *indexPath = [self.slideContentTableView indexPathForRowAtPoint:scrollView.contentOffset];
+    NSLog(@"%d", (int)indexPath.row);
     [self.slideBarTabelView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+
     [self selectedTableView:self.slideBarTabelView indexPath:indexPath];
+    
+    if([self.ywSlideMenuDelegate respondsToSelector:@selector(ywSlideMenu:didSelectedIndex:)]){
+        [self.ywSlideMenuDelegate ywSlideMenu:self didSelectedIndex:indexPath.row];
+    }
 }
 
 - (void)selectedTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -305,6 +349,28 @@
     
     [self.slideBarTabelView reloadData];
     [self.slideContentTableView reloadData];
+}
+
+- (void)setItemsImage:(NSArray *)itemsImage
+{
+    _itemsImage = itemsImage;
+    _itemModelsArr = [NSMutableArray arrayWithCapacity:itemsImage.count];
+    
+    for(int i=0; i<itemsImage.count; i++)
+    {
+        
+        SlideModel *slideModel = [SlideModel new];
+        slideModel.itemImage = itemsImage[i];
+        slideModel.isSelected = NO;
+        if(i==0){
+            slideModel.isSelected = YES;
+        }
+        [_itemModelsArr addObject:slideModel];
+    }
+    
+    [self.slideBarTabelView reloadData];
+    [self.slideContentTableView reloadData];
+    
 }
 
 - (void)setItemBarSize:(CGSize)itemBarSize
